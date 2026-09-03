@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 class Particle {
@@ -19,8 +20,8 @@ double getEnergy() {
     }
 
 void printInfo() {
-cout<< "Parcacik ID: " << id 
- << " | Konum: (" << x << ", " << y << ", " << z << ") | Energy:"<< energy <<  endl;
+cout<< "Particle ID: " << id 
+ << " | Position: (" << x << ", " << y << ", " << z << ") | Energy:"<< energy <<  endl;
 }
 };
 
@@ -37,11 +38,11 @@ public:
         capacity = e_capacity;
         particleCount = 0;
         particles = new Particle[capacity];
-        cout << "Event " << eventId << " olusturuldu. Bellekten yer ayrildi.\n";
+        cout << "Event " << eventId << " created. Memory allocated.\n";
     }
     ~Event() {
         delete[] particles;
-        cout<< "Event " << eventId << " silindi. Bellek temizlendi.\n";
+        cout<< "Event " << eventId << " deleted. Memory cleared.\n";
     }
 
     void addParticle(int p_id, double x, double y, double z,double p_energy) {
@@ -49,12 +50,12 @@ public:
             particles[particleCount] = Particle(p_id, x, y, z, p_energy);
             particleCount++;
         } else {
-            cout << "Hata: Event kapasitesi dolu!\n";
+            cout << "Error: Event capacity is full.\n";
         }
     }
 
     void printEvent() {
-        std::cout << "--- Event ID: " << eventId << " Sonuclari ---\n";
+        cout << "Event ID: " << eventId << " Results\n";
         for (int i = 0; i < particleCount; i++) {
             particles[i].printInfo();
         }
@@ -75,28 +76,33 @@ public:
 };
 
 int main() {
+    cout << "Initializing HEP-Core System.\n";
+    Event collision1(67, 100);
+   
+    
+    ifstream file("data.txt");
+    if (!file.is_open()) {
+        cout << "Error: Could not open data.txt!\n";
+        return 1;
+    }
+    double x, y, z, energy;
+    int id_counter = 1;
+    cout<< "File opened,particles are loading to RAM.\n";
 
-    cout << "HEP-Core Sistemi Baslatiliyor...\n";
-    cout << "--------------------------------\n";
 
+    while (file >> x >> y >> z >> energy) {
+        collision1.addParticle(id_counter, x, y, z, energy);
+        id_counter++;
+    }
+    file.close();
+    cout << "File closed.\n";
 
-    Event collision1(101, 5);
-
-    collision1.addParticle(1, 10.5, 20.1, 0.0, 50.5);
-    collision1.addParticle(2, -5.2, 8.4, 3.1, 120.0);
-    collision1.addParticle(3, 0.0, 0.0, 15.9, 15.2);
-    collision1.addParticle(4, 1.1, 2.2, 3.3, 400.8);
-    collision1.addParticle(5, 7.7, 8.8, 9.9, 85.4);
-
-    cout << "\n--- Siralamadan Once (Sensorden Gelen Sira) ---\n";
+    cout << (id_counter - 1) << " particles loaded successfully.\n\n";
+    cout << "Original Order:\n";
     collision1.printEvent();
-
+    cout << "Sorting by Energy:\n";
     collision1.sortParticlesByEnergy();
-
-    cout << "\n--- Enerjiye Gore Siralandiktan Sonra ---\n";
     collision1.printEvent();
-
-    cout << "\nSistem kapatiliyor...\n";
+    cout << "System shutting down.\n";
     return 0;
-
 }
