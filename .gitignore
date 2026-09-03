@@ -1,0 +1,12 @@
+# Derlenmis C++ calistirilabilir dosyalari (macOS/Linux)
+main
+*.out
+
+# macOS Hata Ayiklama (Debug) dosyalari
+*.dSYM/
+
+# VS Code calisma alani ayarlari
+.vscode/
+
+# macOS sistem gizli dosyalari
+.DS_Store

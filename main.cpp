@@ -76,8 +76,8 @@ public:
 
 int main() {
 
-    std::cout << "HEP-Core Sistemi Baslatiliyor...\n";
-    std::cout << "--------------------------------\n";
+    cout << "HEP-Core Sistemi Baslatiliyor...\n";
+    cout << "--------------------------------\n";
 
 
     Event collision1(101, 5);
@@ -93,10 +93,10 @@ int main() {
 
     collision1.sortParticlesByEnergy();
 
-    std::cout << "\n--- Enerjiye Gore Siralandiktan Sonra ---\n";
+    cout << "\n--- Enerjiye Gore Siralandiktan Sonra ---\n";
     collision1.printEvent();
 
-    std::cout << "\nSistem kapatiliyor...\n";
+    cout << "\nSistem kapatiliyor...\n";
     return 0;
 
 }
