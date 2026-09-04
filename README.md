@@ -5,18 +5,19 @@ Personal Note: I am developing this project to improve myself and prepare for my
 
 This project is actively developed to demonstrate core computer engineering principles, focusing on raw memory management, object-oriented design, and algorithmic efficiency without relying on high-level external libraries.
 
-## Current Features (v0.1 - Foundation)
+## Current Features (v0.2 - Data Ingestion)
+* **File I/O Integration:** Parsing external simulation datasets (`data.txt`) using the `fstream` library to dynamically populate the Event memory.
 * **Particle & Event Modeling:** Custom classes to represent physical collision events and individual particle properties (3D spatial coordinates and energy levels).
-* **Dynamic Memory Management:** Raw pointer manipulation and custom destructors (`new` / `delete`) to ensure zero memory leaks during high-volume event generation.
-* **Algorithmic Sorting:** Custom in-place sorting algorithms to filter and rank particles based on their MeV (Megaelectronvolt) energy values.
+* **Dynamic Memory Management:** Raw pointer manipulation and custom destructors (`new` / `delete`) to ensure zero memory leaks.
+* **Algorithmic Sorting:** Custom in-place sorting algorithms to filter and rank particles based on their energy values.
 
 ## Technology Stack
 * **Language:** C++ (C++17 standard)
 * **Architecture:** Object-Oriented Programming (OOP)
-* **Key Concepts:** Dynamic Memory Allocation, Pointer Arithmetic, Asymptotic Analysis.
+* **Key Concepts:** Dynamic Memory Allocation, File I/O, Pointer Arithmetic, Asymptotic Analysis.
 
 ## Roadmap (Upcoming Features)
-- [ ] **Large-scale File I/O:** Parsing massive datasets (e.g., .csv files) simulating millions of particle hits.
+- [x] **Large-scale File I/O:** Parsing massive datasets simulating millions of particle hits.
 - [ ] **Linear Algebra Engine:** Custom `Matrix` and `Vector` classes for 3D kinematic transformations.
 - [ ] **Track Reconstruction:** Implementing Graph algorithms (BFS/DFS) to trace and identify particle paths.
 - [ ] **Optimization & Profiling:** Transitioning to advanced sorting algorithms and measuring RAM/CPU execution times.
