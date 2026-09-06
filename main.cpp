@@ -20,6 +20,27 @@ class Vector {
         }
 
 };
+class Matrix {
+public:
+    double M[3][3];
+    Matrix(){
+        for(int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                M[i][j]=0.0;
+            }
+        }
+    M[0][0] = 1.0;
+    M[1][1] = 1.0;
+    M[2][2] = 1.0;
+    }
+
+    Vector operator* (Vector vec) {
+        double n_x = (M[0][0] * vec.x) + (M[0][1] * vec.y) + (M[0][2] * vec.z);
+        double n_y = (M[1][0] * vec.x) + (M[1][1] * vec.y) + (M[1][2] * vec.z);
+        double n_z = (M[2][0] * vec.x) + (M[2][1] * vec.y) + (M[2][2] * vec.z);
+        return Vector(n_x, n_y, n_z);
+    }
+};
 class Particle {
     private:
         int id;
@@ -42,10 +63,13 @@ class Particle {
         }
         void printInfo(){
             cout<< "Particle ID: " << id << endl;
-            cout<< "Position:";
+            cout<< "Position"<<endl;
             position.display() ;
             cout<< endl << "Magnitude:" << position.magnitude() << endl;
             cout<< "Energy: " << energy << endl;
+        }
+        void transform(Matrix m) {
+            position = m * position;
         }
 };
 
@@ -78,7 +102,7 @@ class Event {
         }
 
         void printEvent() {
-            cout << "Event ID: " << eventId << " Results:\n";
+            cout << "Event ID:" << eventId << endl << "Results\n";
             for (int i = 0; i < particleCount; i++) {
                 particles[i].printInfo();
             }
@@ -95,6 +119,11 @@ class Event {
             }
         }
     }
+    void applyMagneticField(Matrix m){
+        for(int i=0; i<particleCount; i++) {
+            particles[i].transform(m);
+        }
+    }
 };
 int main() {
     cout << "Initializing HEP-Core System...\n";
@@ -109,7 +138,7 @@ int main() {
     double x, y, z, enerji;
     int id_counter = 1;
     
-    cout << "File opened, particles are loading to RAM...\n\n";
+    cout << "File opened, particles are loading to RAM.\n\n";
 
     while (file >> x >> y >> z >> enerji) {
         collision1.addParticle(id_counter, x, y, z, enerji);
@@ -119,7 +148,18 @@ int main() {
     collision1.sortParticlesByEnergy();
     collision1.printEvent();
     
-    cout << "\nSystem shutting down.\n";
+    cout << "Before Magnetic Field \n";
+    collision1.printEvent(); 
+    
+    Matrix magneticField; 
+    magneticField.M[0][0] = 2.0; 
+    magneticField.M[1][1] = 2.0; 
+    magneticField.M[2][2] = 2.0; 
+
+    collision1.applyMagneticField(magneticField);
+
+    cout << "\nAfter Magnetic Field \n";
+    collision1.printEvent();
     return 0;
 }
     
