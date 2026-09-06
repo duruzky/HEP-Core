@@ -152,9 +152,19 @@ int main() {
     collision1.printEvent(); 
     
     Matrix magneticField; 
-    magneticField.M[0][0] = 2.0; 
-    magneticField.M[1][1] = 2.0; 
-    magneticField.M[2][2] = 2.0; 
+    double angle = 1.5708; 
+ 
+    magneticField.M[0][0] = cos(angle);
+    magneticField.M[0][1] = -sin(angle);
+    magneticField.M[0][2] = 0.0;
+   
+    magneticField.M[1][0] = sin(angle);
+    magneticField.M[1][1] = cos(angle);
+    magneticField.M[1][2] = 0.0;
+    
+    magneticField.M[2][0] = 0.0;
+    magneticField.M[2][1] = 0.0;
+    magneticField.M[2][2] = 1.0;
 
     collision1.applyMagneticField(magneticField);
 
