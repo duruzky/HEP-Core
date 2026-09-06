@@ -18,7 +18,7 @@ This project is actively developed to demonstrate core computer engineering prin
 
 ## Roadmap (Upcoming Features)
 - [x] **Large-scale File I/O:** Parsing massive datasets simulating millions of particle hits.
-- [ ] **Linear Algebra Engine:** Custom `Matrix` and `Vector` classes for 3D kinematic transformations.
+- [x] **Linear Algebra Engine:** Custom `Matrix` and `Vector` classes for 3D kinematic transformations.
 - [ ] **Track Reconstruction:** Implementing Graph algorithms (BFS/DFS) to trace and identify particle paths.
 - [ ] **Optimization & Profiling:** Transitioning to advanced sorting algorithms and measuring RAM/CPU execution times.
 
