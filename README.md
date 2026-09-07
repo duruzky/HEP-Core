@@ -1,30 +1,30 @@
 # HEP-Core (High-Energy Physics Core) 
 
 Personal Note: I am developing this project to improve myself and prepare for my 3rd semester in Computer Engineering. My goal is to combine two fields I really love: physics and software.
-**HEP-Core** is a lightweight, high-performance C++ library built from scratch to simulate the fundamental data structures and algorithmic processing required in high-energy physics experiments (such as particle collisions).
+# HEP-Core (High-Energy Physics Core)
 
-This project is actively developed to demonstrate core computer engineering principles, focusing on raw memory management, object-oriented design, and algorithmic efficiency without relying on high-level external libraries.
+A professional-grade 3D physics simulation engine built in modern C++ to model particle kinematics, magnetic field interactions, and dynamic event management.
 
-## Current Features (v0.2 - Data Ingestion)
-* **File I/O Integration:** Parsing external simulation datasets (`data.txt`) using the `fstream` library to dynamically populate the Event memory.
-* **Particle & Event Modeling:** Custom classes to represent physical collision events and individual particle properties (3D spatial coordinates and energy levels).
-* **Dynamic Memory Management:** Raw pointer manipulation and custom destructors (`new` / `delete`) to ensure zero memory leaks.
-* **Algorithmic Sorting:** Custom in-place sorting algorithms to filter and rank particles based on their energy values.
+## Version 2.0 - Core Architecture Updates
 
-## Technology Stack
-* **Language:** C++ (C++17 standard)
-* **Architecture:** Object-Oriented Programming (OOP)
-* **Key Concepts:** Dynamic Memory Allocation, File I/O, Pointer Arithmetic, Asymptotic Analysis.
+This project demonstrates advanced C++ paradigms and object-oriented design principles:
 
-## Roadmap (Upcoming Features)
-- [x] **Large-scale File I/O:** Parsing massive datasets simulating millions of particle hits.
-- [x] **Linear Algebra Engine:** Custom `Matrix` and `Vector` classes for 3D kinematic transformations.
-- [ ] **Track Reconstruction:** Implementing Graph algorithms (BFS/DFS) to trace and identify particle paths.
-- [ ] **Optimization & Profiling:** Transitioning to advanced sorting algorithms and measuring RAM/CPU execution times.
+* **Polymorphism & Inheritance:** Implemented a base `Particle` class with derived `Electron` and `Proton` classes, overriding virtual methods for specific particle behaviors.
+* **Advanced Memory Management:** Transitioned to dynamic pointer arrays (`Particle**`) within the `Event` class to prevent **object slicing**, ensure polymorphic behavior, and manage heap memory safely without leaks.
+* **Linear Algebra & Physics Engine:** Built custom `Matrix` and `Vector` composition for 3D spatial transformations, successfully applying Z-axis rotation matrices to simulate magnetic field deflections.
+* **Encapsulation:** Strict access control (`protected` and `private` members) to maintain data integrity across the simulation lifecycle.
 
-## How to Compile and Run
-This project is compiled using `clang++` and is compatible with macOS/Linux Unix environments.
+## Technical Stack
+* **Language:** C++
+* **Concepts:** OOP, Pointers, Constructor Chaining, Dynamic Memory Allocation, File I/O.
+
+## Next Steps (Roadmap)
+* Implementation of advanced data structures for faster particle querying.
+* Algorithmic optimization for energy-based particle sorting.
+
+## 💻 How to Run (macOS)
+Open your terminal in the project directory and run the following commands:
 
 ```bash
-clang++ main.cpp -o main
-./main
+clang++ main.cpp -o HEP-Core
+./HEP-Core
