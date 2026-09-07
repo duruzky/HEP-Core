@@ -78,10 +78,11 @@ class Electron: public Particle {
     Electron (int pid, double px, double py, double pz, double penergy): Particle (pid, px, py, pz, penergy){
     }
     void printInfo() override {
-        cout << "ELECTRON" << endl;
+        cout << "-ELECTRON-" << endl;
         cout << "ID: " << id << " \nEnergy: " << energy << " MeV" << endl;
         cout << "Position: ";
         position.display();
+        cout << endl << "----------------\n" << endl;
     }
 };
 
@@ -90,10 +91,11 @@ class Proton: public Particle {
     Proton (int pid, double px, double py, double pz, double penergy): Particle (pid, px, py, pz, penergy){
     }
     void printInfo() override {
-        cout << "PROTON" << endl;
+        cout << "+PROTON+" << endl;
         cout << "ID: " << id << " \nEnergy: " << energy << " MeV" << endl;
         cout << "Position: ";
         position.display();
+        cout << endl << "++++++++++++++\n" << endl;
     }
 
 };
@@ -103,22 +105,25 @@ class Event {
         int eventId;
         int capacity;
         int particleCount;
-        Particle* particles;
+        Particle** particles;
     
     public:
        Event(int eid, int ecapacity) {
             eventId = eid;
             capacity = ecapacity;
             particleCount = 0; 
-            particles = new Particle[capacity]; 
+            particles = new Particle*[capacity]; 
        }
        ~Event() {
-        delete[] particles;
+        for(int i=0; i < particleCount; i++){
+                delete particles[i];
        }
+       delete[] particles; 
+    }
        
-       void addParticle(int pid, double x, double y, double z, double penergy) {
+       void addParticle(Particle* newParticle) {
             if (particleCount < capacity) {
-                particles[particleCount] = Particle(pid, x, y, z, penergy);
+                particles[particleCount] = newParticle; // Anahtarı panoya as!
                 particleCount++;
             } 
             else {
@@ -127,17 +132,19 @@ class Event {
         }
 
         void printEvent() {
-            cout << "Event ID:" << eventId << endl << "Results\n";
+            cout << "\n============================\n";
+            cout << "EVENT ID: " << eventId << " RESULTS\n";
+            cout << "==============================\n\n";
             for (int i = 0; i < particleCount; i++) {
-                particles[i].printInfo();
+                particles[i]->printInfo();
             }
         }
 
         void sortParticlesByEnergy() {
         for (int i = 0; i < particleCount - 1; i++) {
             for (int j = 0; j < particleCount - i - 1; j++) {
-                if (particles[j].GetEnergy() < particles[j + 1].GetEnergy()) {
-                    Particle temp = particles[j];
+                if (particles[j]->GetEnergy() < particles[j + 1]->GetEnergy()) {
+                    Particle* temp = particles[j];
                     particles[j] = particles[j + 1];
                     particles[j + 1] = temp;
                 }
@@ -146,12 +153,12 @@ class Event {
     }
     void applyMagneticField(Matrix m){
         for(int i=0; i<particleCount; i++) {
-            particles[i].transform(m);
+            particles[i]->transform(m);
         }
     }
 };
 int main() {
-    cout << "Initializing HEP-Core System...\n";
+    cout << "\nInitializing HEP-Core System..\n\n";
     Proton p1(102, -3.0, 0.0, 1.5, 990.0);
     p1.printInfo();
     Electron e1(101, 5.0, 5.0, 5.0, 120.5);
@@ -170,9 +177,19 @@ int main() {
     cout << "File opened, particles are loading to RAM.\n\n";
 
     while (file >> x >> y >> z >> enerji) {
-        collision1.addParticle(id_counter, x, y, z, enerji);
+        Particle* newParticle; 
+        if (id_counter % 2 == 0) {
+            newParticle = new Electron(id_counter, x, y, z, enerji);
+        } 
+        
+        else {
+            newParticle = new Proton(id_counter, x, y, z, enerji);
+        }
+
+        collision1.addParticle(newParticle);
         id_counter++;
     }
+    
     file.close();
     collision1.sortParticlesByEnergy();
     collision1.printEvent();
