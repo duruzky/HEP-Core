@@ -42,7 +42,7 @@ public:
     }
 };
 class Particle {
-    private:
+    protected:
         int id;
         Vector position;
         double energy;
@@ -61,7 +61,7 @@ class Particle {
         double GetEnergy(){
             return energy;
         }
-        void printInfo(){
+        virtual void printInfo(){
             cout<< "Particle ID: " << id << endl;
             cout<< "Position"<<endl;
             position.display() ;
@@ -71,6 +71,31 @@ class Particle {
         void transform(Matrix m) {
             position = m * position;
         }
+};
+
+class Electron: public Particle {
+    public:
+    Electron (int pid, double px, double py, double pz, double penergy): Particle (pid, px, py, pz, penergy){
+    }
+    void printInfo() override {
+        cout << "ELECTRON" << endl;
+        cout << "ID: " << id << " \nEnergy: " << energy << " MeV" << endl;
+        cout << "Position: ";
+        position.display();
+    }
+};
+
+class Proton: public Particle {
+    public:
+    Proton (int pid, double px, double py, double pz, double penergy): Particle (pid, px, py, pz, penergy){
+    }
+    void printInfo() override {
+        cout << "PROTON" << endl;
+        cout << "ID: " << id << " \nEnergy: " << energy << " MeV" << endl;
+        cout << "Position: ";
+        position.display();
+    }
+
 };
 
 class Event {
@@ -127,6 +152,10 @@ class Event {
 };
 int main() {
     cout << "Initializing HEP-Core System...\n";
+    Proton p1(102, -3.0, 0.0, 1.5, 990.0);
+    p1.printInfo();
+    Electron e1(101, 5.0, 5.0, 5.0, 120.5);
+    e1.printInfo();
     Event collision1(67, 100);
     
     ifstream file("data.txt");
