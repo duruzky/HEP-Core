@@ -18,11 +18,17 @@ This project demonstrates advanced C++ paradigms and object-oriented design prin
 * **Language:** C++
 * **Concepts:** OOP, Pointers, Constructor Chaining, Dynamic Memory Allocation, File I/O.
 
-## Next Steps (Roadmap)
-* Implementation of advanced data structures for faster particle querying.
-* Algorithmic optimization for energy-based particle sorting.
+## Optimization & Algorithms (Version 2.1)
+* **STL & Vectors:** Migrated static raw arrays to dynamic `std::vector` containers for safe and scalable data management.
+* **Algorithmic Efficiency:** Replaced legacy $O(n^2)$ sorting with $O(n \log n)$ `std::sort` using the C++ Standard Template Library.
+* **Modern C++:** Implemented custom **Lambda Expressions** for dynamic, on-the-fly particle sorting based on kinetic energy.
 
-## 💻 How to Run (macOS)
+* ## Next Steps (Roadmap)
+* **Smart Pointers:** Transitioning from raw pointers (`Particle*`) to modern C++ smart pointers (`std::unique_ptr`) for completely automated, leak-proof memory management.
+* **Data Export & Visualization:** Implementing a module to export post-deflection particle trajectories into `.csv` files for visualization in external tools.
+* **Build System Migration:** Upgrading from raw compiler commands to **CMake** to standardize the build process across different operating systems.
+
+## How to Run (macOS)
 Open your terminal in the project directory and run the following commands:
 
 ```bash
