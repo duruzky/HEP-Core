@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream> 
 #include <cmath> 
+#include <vector>
+#include <algorithm> 
 using namespace std; 
 
 class Vector {
@@ -103,56 +105,38 @@ class Proton: public Particle {
 class Event {
     private:
         int eventId;
-        int capacity;
-        int particleCount;
-        Particle** particles;
+        vector<Particle*> particles;
     
     public:
-       Event(int eid, int ecapacity) {
+       Event(int eid) {
             eventId = eid;
-            capacity = ecapacity;
-            particleCount = 0; 
-            particles = new Particle*[capacity]; 
-       }
-       ~Event() {
-        for(int i=0; i < particleCount; i++){
-                delete particles[i];
-       }
-       delete[] particles; 
-    }
-       
-       void addParticle(Particle* newParticle) {
-            if (particleCount < capacity) {
-                particles[particleCount] = newParticle; // Anahtarı panoya as!
-                particleCount++;
-            } 
-            else {
-                cout << "Error: Event capacity is full.\n";
-            }
         }
-
+       ~Event() {
+        for(int i = 0; i < particles.size(); i++){
+            delete particles[i]; 
+        }
+    }
+       void addParticle(Particle* newParticle) {
+            particles.push_back(newParticle);
+        }
+        
         void printEvent() {
             cout << "\n============================\n";
             cout << "EVENT ID: " << eventId << " RESULTS\n";
             cout << "==============================\n\n";
-            for (int i = 0; i < particleCount; i++) {
+            for (int i = 0; i < particles.size(); i++) {
                 particles[i]->printInfo();
             }
         }
 
         void sortParticlesByEnergy() {
-        for (int i = 0; i < particleCount - 1; i++) {
-            for (int j = 0; j < particleCount - i - 1; j++) {
-                if (particles[j]->GetEnergy() < particles[j + 1]->GetEnergy()) {
-                    Particle* temp = particles[j];
-                    particles[j] = particles[j + 1];
-                    particles[j + 1] = temp;
-                }
-            }
-        }
-    }
+        sort(particles.begin(), particles.end(), [](Particle* a, Particle* b) {
+            return a->GetEnergy() > b->GetEnergy(); 
+        });
+}
+    
     void applyMagneticField(Matrix m){
-        for(int i=0; i<particleCount; i++) {
+        for(int i=0; i<particles.size(); i++) {
             particles[i]->transform(m);
         }
     }
@@ -163,7 +147,7 @@ int main() {
     p1.printInfo();
     Electron e1(101, 5.0, 5.0, 5.0, 120.5);
     e1.printInfo();
-    Event collision1(67, 100);
+    Event collision1(67);
     
     ifstream file("data.txt");
     if (!file.is_open()) {
@@ -218,4 +202,3 @@ int main() {
     collision1.printEvent();
     return 0;
 }
-    
