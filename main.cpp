@@ -3,6 +3,7 @@
 #include <cmath> 
 #include <vector>
 #include <algorithm> 
+#include <memory>
 using namespace std; 
 
 class Vector {
@@ -20,6 +21,10 @@ class Vector {
         void display(){
             cout << "Vector: (" << x << ", " << y << ", " << z << ")";
         }
+        void writeCSV(ofstream& file) {
+        file << x << "," << y << "," << z;
+        }
+    
 
 };
 class Matrix {
@@ -50,6 +55,9 @@ class Particle {
         double energy;
 
     public:
+       virtual ~Particle() {} 
+       virtual void writeToCSV(ofstream& file) = 0;
+       
         Particle() {
             id = 0;
             energy = 0.0;
@@ -86,6 +94,11 @@ class Electron: public Particle {
         position.display();
         cout << endl << "----------------\n" << endl;
     }
+    void writeToCSV(ofstream& file) override {
+        file << id << ",Electron," << energy << ",";
+        position.writeCSV(file);
+        file << "\n";
+    }
 };
 
 class Proton: public Particle {
@@ -99,26 +112,27 @@ class Proton: public Particle {
         position.display();
         cout << endl << "++++++++++++++\n" << endl;
     }
+    void writeToCSV(ofstream& file) override {
+        file << id << ",Proton," << energy << ",";
+        position.writeCSV(file);
+        file << "\n";
+    }
 
 };
 
 class Event {
     private:
         int eventId;
-        vector<Particle*> particles;
+        vector<unique_ptr<Particle>> particles;
     
     public:
        Event(int eid) {
             eventId = eid;
         }
-       ~Event() {
-        for(int i = 0; i < particles.size(); i++){
-            delete particles[i]; 
-        }
+
+       void addParticle(unique_ptr<Particle> newParticle) {
+        particles.push_back(std::move(newParticle)); 
     }
-       void addParticle(Particle* newParticle) {
-            particles.push_back(newParticle);
-        }
         
         void printEvent() {
             cout << "\n============================\n";
@@ -130,15 +144,25 @@ class Event {
         }
 
         void sortParticlesByEnergy() {
-        sort(particles.begin(), particles.end(), [](Particle* a, Particle* b) {
+        sort(particles.begin(), particles.end(), [](const unique_ptr<Particle>& a, const unique_ptr<Particle>& b) {
             return a->GetEnergy() > b->GetEnergy(); 
         });
-}
+    }
     
     void applyMagneticField(Matrix m){
         for(int i=0; i<particles.size(); i++) {
             particles[i]->transform(m);
         }
+    }
+
+    void exportToCSV(string filename) {
+        ofstream file(filename);
+        file << "ID,Type,Energy,X,Y,Z\n";
+        for (const auto& p : particles) {
+            p->writeToCSV(file);
+        }
+        file.close();
+        cout << "\n[SUCCESS] Simulation data safely exported to " << filename << "!\n";
     }
 };
 int main() {
@@ -161,16 +185,16 @@ int main() {
     cout << "File opened, particles are loading to RAM.\n\n";
 
     while (file >> x >> y >> z >> enerji) {
-        Particle* newParticle; 
-        if (id_counter % 2 == 0) {
-            newParticle = new Electron(id_counter, x, y, z, enerji);
-        } 
+        unique_ptr<Particle> newParticle; 
         
-        else {
-            newParticle = new Proton(id_counter, x, y, z, enerji);
+        if (id_counter % 2 == 0) {
+  
+            newParticle = make_unique<Electron>(id_counter, x, y, z, enerji);
+        } else {
+            newParticle = make_unique<Proton>(id_counter, x, y, z, enerji);
         }
 
-        collision1.addParticle(newParticle);
+        collision1.addParticle(std::move(newParticle));
         id_counter++;
     }
     
@@ -200,5 +224,6 @@ int main() {
 
     cout << "\nAfter Magnetic Field \n";
     collision1.printEvent();
+    collision1.exportToCSV("results.csv");
     return 0;
 }
