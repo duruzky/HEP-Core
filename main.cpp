@@ -173,7 +173,7 @@ int main() {
     e1.printInfo();
     Event collision1(67);
     
-    ifstream file("data.txt");
+    ifstream file("../data.txt");
     if (!file.is_open()) {
         cout << "Error: Could not open data.txt!\n";
         return 1;
